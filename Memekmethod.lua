@@ -79,8 +79,8 @@ local function startBlati()
                 task.wait(0.00001)
                 minigameStarted:FireServer(sessionID)
                 
-                -- FIX DELAY REEL (sesuai update Indo Strike + di cepetin sedikit)
-                local reelDuration = math.random(6.5, 10) -- delay reel yang lebih cepet
+                -- FIX DELAY REEL (di cepetin lagi + aman)
+                local reelDuration = math.random(5.0, 8.0)
                 task.wait(reelDuration)
                 
                 local successArgs = {
@@ -132,8 +132,8 @@ local function startForceSecret()
                 task.wait(0.00001)
                 minigameStarted:FireServer(sessionID)
                 
-                -- FIX DELAY REEL (sesuai update Indo Strike + di cepetin sedikit)
-                local reelDuration = math.random(6.5, 10) -- delay reel yang lebih cepet
+                -- FIX DELAY REEL (di cepetin lagi + aman)
+                local reelDuration = math.random(5.0, 8.0)
                 task.wait(reelDuration)
                 
                 local successArgs = {
@@ -174,8 +174,6 @@ MainTab:CreateToggle({
         end
     end,
 })
-
--- (Semua tab PLAYER, SHOP, TELEPORT, rod equip, auto sell, dll TETAP SAMA PERSIS seperti sebelumnya)
 
 local jumpConnection
 PlayerTab:CreateToggle({
@@ -363,4 +361,4 @@ local autoSellTimerLoop = task.spawn(function()
     end
 end)
 
-print("🎉 HAMZHUB CEPET MODE AKTIF! Reel lebih kenceng sekarang bro 🔥 Gas mancing!")
+print("🎉 HAMZHUB SUPER CEPET MODE AKTIF! Reel 5.0-8.0 detik sekarang bro 🔥 Gas mancing!")
