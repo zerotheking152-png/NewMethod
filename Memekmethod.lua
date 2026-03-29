@@ -79,9 +79,8 @@ local function startBlati()
                 task.wait(0.00001)
                 minigameStarted:FireServer(sessionID)
                 
-                -- FIX DELAY REEL (sesuai update Indo Strike)
-                -- Sekarang nunggu dulu sesuai durasi reel biar server nerima
-                local reelDuration = math.random(7.8, 11.5) -- delay reel yang aman
+                -- FIX DELAY REEL (sesuai update Indo Strike + di cepetin sedikit)
+                local reelDuration = math.random(6.5, 10) -- delay reel yang lebih cepet
                 task.wait(reelDuration)
                 
                 local successArgs = {
@@ -113,10 +112,8 @@ MainTab:CreateToggle({
         getgenv().Blati = Value
         if Value then
             startBlati()
-            local args = {
-	"bd4238ec-6bbc-4523-8c63-a17356e1f130"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("FishUI"):WaitForChild("ToServer"):WaitForChild("ToggleFavorite"):FireServer(unpack(args))
+            local args = {"bd4238ec-6bbc-4523-8c63-a17356e1f130"}
+            game:GetService("ReplicatedStorage"):WaitForChild("FishUI"):WaitForChild("ToServer"):WaitForChild("ToggleFavorite"):FireServer(unpack(args))
             local backpackTool = player.Backpack:FindFirstChildOfClass("Tool")
             if backpackTool then backpackTool.Parent = player.Character end
         else
@@ -135,9 +132,8 @@ local function startForceSecret()
                 task.wait(0.00001)
                 minigameStarted:FireServer(sessionID)
                 
-                -- FIX DELAY REEL (sesuai update Indo Strike)
-                -- Sekarang nunggu dulu sesuai durasi reel biar server nerima
-                local reelDuration = math.random(7.8, 11.5) -- delay reel yang aman
+                -- FIX DELAY REEL (sesuai update Indo Strike + di cepetin sedikit)
+                local reelDuration = math.random(6.5, 10) -- delay reel yang lebih cepet
                 task.wait(reelDuration)
                 
                 local successArgs = {
@@ -169,10 +165,8 @@ MainTab:CreateToggle({
         getgenv().ForceSecret = Value
         if Value then
             startForceSecret()
-            local args = {
-	"bd4238ec-6bbc-4523-8c63-a17356e1f130"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("FishUI"):WaitForChild("ToServer"):WaitForChild("ToggleFavorite"):FireServer(unpack(args))
+            local args = {"bd4238ec-6bbc-4523-8c63-a17356e1f130"}
+            game:GetService("ReplicatedStorage"):WaitForChild("FishUI"):WaitForChild("ToServer"):WaitForChild("ToggleFavorite"):FireServer(unpack(args))
             local backpackTool = player.Backpack:FindFirstChildOfClass("Tool")
             if backpackTool then backpackTool.Parent = player.Character end
         else
@@ -180,6 +174,8 @@ game:GetService("ReplicatedStorage"):WaitForChild("FishUI"):WaitForChild("ToServ
         end
     end,
 })
+
+-- (Semua tab PLAYER, SHOP, TELEPORT, rod equip, auto sell, dll TETAP SAMA PERSIS seperti sebelumnya)
 
 local jumpConnection
 PlayerTab:CreateToggle({
@@ -367,4 +363,4 @@ local autoSellTimerLoop = task.spawn(function()
     end
 end)
 
-print("🎉 HAMZHUB GUI KEREN udah muncul bro! Tab MAIN & PLAYER siap. Cast manual 1x dulu biar Blati nyala. Gas polll 🔥")
+print("🎉 HAMZHUB CEPET MODE AKTIF! Reel lebih kenceng sekarang bro 🔥 Gas mancing!")
