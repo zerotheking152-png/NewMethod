@@ -54,8 +54,8 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
     Name = "HamzHub",
-    LoadingTitle = "HamzHub Is Loading",
-    LoadingSubtitle = "",
+    LoadingTitle = "HAMZ",
+    LoadingSubtitle = "HamzHub Is Loading",
     ShowText = "HamzHub",
     Theme = "Default",
     ToggleUIKeybind = "K",
@@ -79,8 +79,8 @@ local function startBlati()
                 task.wait(0.00001)
                 minigameStarted:FireServer(sessionID)
                 
-                -- FIX DELAY REEL (di cepetin lagi + aman)
-                local reelDuration = math.random(5.0, 8.0)
+                -- BIG UPDATE: Reel delay CEPET BANGET
+                local reelDuration = math.random(2.5, 4.5)
                 task.wait(reelDuration)
                 
                 local successArgs = {
@@ -132,8 +132,8 @@ local function startForceSecret()
                 task.wait(0.00001)
                 minigameStarted:FireServer(sessionID)
                 
-                -- FIX DELAY REEL (di cepetin lagi + aman)
-                local reelDuration = math.random(5.0, 8.0)
+                -- BIG UPDATE: Reel delay CEPET BANGET
+                local reelDuration = math.random(2.5, 4.5)
                 task.wait(reelDuration)
                 
                 local successArgs = {
@@ -361,4 +361,4 @@ local autoSellTimerLoop = task.spawn(function()
     end
 end)
 
-print("🎉 HAMZHUB SUPER CEPET MODE AKTIF! Reel 5.0-8.0 detik sekarang bro 🔥 Gas mancing!")
+print("🎉 HAMZHUB BIG UPDATE CEPET BANGET! Loading sekarang HAMZ + reel 2.5-4.5 detik 🔥 Gas polll bro!")
