@@ -79,8 +79,8 @@ local function startBlati()
                 task.wait(0.00001)
                 minigameStarted:FireServer(sessionID)
                 
-                -- BIG UPDATE: Reel delay CEPET BANGET
-                local reelDuration = math.random(2.5, 4.5)
+                -- BIG UPDATE: Reel delay dinaikin SEDIKIT biar aman
+                local reelDuration = math.random(3.0, 5.0)
                 task.wait(reelDuration)
                 
                 local successArgs = {
@@ -132,8 +132,8 @@ local function startForceSecret()
                 task.wait(0.00001)
                 minigameStarted:FireServer(sessionID)
                 
-                -- BIG UPDATE: Reel delay CEPET BANGET
-                local reelDuration = math.random(2.5, 4.5)
+                -- BIG UPDATE: Reel delay dinaikin SEDIKIT biar aman
+                local reelDuration = math.random(3.0, 5.0)
                 task.wait(reelDuration)
                 
                 local successArgs = {
@@ -361,4 +361,4 @@ local autoSellTimerLoop = task.spawn(function()
     end
 end)
 
-print("🎉 HAMZHUB BIG UPDATE CEPET BANGET! Loading sekarang HAMZ + reel 2.5-4.5 detik 🔥 Gas polll bro!")
+print("🎉 HAMZHUB BIG UPDATE - Reel dinaikin SEDIKIT jadi 3.0-5.0 detik biar aman & tetep cepet bro 🔥 Gas mancing!")
