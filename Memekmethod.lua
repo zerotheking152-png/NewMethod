@@ -79,9 +79,9 @@ local function startBlati()
                 task.wait(0.00001)
                 minigameStarted:FireServer(sessionID)
                 
-                -- BIG UPDATE: Reel delay dinaikin SEDIKIT biar aman
-                local reelDuration = math.random(3.0, 5.0)
-                task.wait(reelDuration)
+                -- NEW METHOD: CELAH BRUTAL INSTANT (game Indo Strike tambah delay reel, tapi ini bypass)
+                -- Delay dihapus total + duration super kecil biar server nerima (anti-cheat selalu ada loophole)
+                local reelDuration = math.random(0.05, 0.15) -- super kecil tapi aman
                 
                 local successArgs = {
                     ["duration"] = reelDuration,
@@ -132,9 +132,8 @@ local function startForceSecret()
                 task.wait(0.00001)
                 minigameStarted:FireServer(sessionID)
                 
-                -- BIG UPDATE: Reel delay dinaikin SEDIKIT biar aman
-                local reelDuration = math.random(3.0, 5.0)
-                task.wait(reelDuration)
+                -- NEW METHOD: CELAH BRUTAL INSTANT (sama kayak Blati, bypass delay reel yang baru)
+                local reelDuration = math.random(0.05, 0.15) -- super kecil biar instant brutal lagi
                 
                 local successArgs = {
                     ["duration"] = reelDuration,
@@ -361,4 +360,4 @@ local autoSellTimerLoop = task.spawn(function()
     end
 end)
 
-print("🎉 HAMZHUB BIG UPDATE - Reel dinaikin SEDIKIT jadi 3.0-5.0 detik biar aman & tetep cepet bro 🔥 Gas mancing!")
+print("🎉 HAMZHUB BRUTAL UPDATE - CELAH BARU DITEMUKAN! Reel delay Indo Strike dibypass pake duration super kecil + no wait = instant brutal lagi 🔥 Gas mancing bro!")
