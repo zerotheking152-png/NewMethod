@@ -79,21 +79,21 @@ local function startBlati()
                 task.wait(0.00001)
                 minigameStarted:FireServer(sessionID)
                 
-                -- NEW METHOD 2026 (LuvHub/Getfish style post-patch)
-                -- Short reel + heavy spam reelFinished + delay cancel simulation
-                local reelDuration = math.random(0.25, 0.85)
-                task.wait(0.05) -- minimal wait biar server nerima tanpa kick
+                -- DEEP SEARCH PASTEBIN + GITHUB 2026 (LuvHub delay cancel + throttle style)
+                -- Server tambah delay reel → sekarang pake medium reel + cancel simulation + heavy throttle
+                local reelDuration = math.random(1.8, 4.2) -- minimal aman post-delay patch
+                task.wait(0.08) -- throttle biar server nerima tanpa kick
                 
-                for i = 1, 8 do  -- spam lebih berat biar cepet + anti detect
+                for i = 1, 10 do  -- spam + delay cancel
                     local successArgs = {
                         ["duration"] = reelDuration,
                         ["result"] = "SUCCESS",
-                        ["insideRatio"] = 0.85 + (math.random(4, 14) / 100),
+                        ["insideRatio"] = 0.86 + (math.random(3, 13) / 100),
                         ["catchType"] = "NORMAL",
                         ["isSecret"] = false
                     }
                     reelFinished:FireServer(successArgs, sessionID)
-                    task.wait(0.00008)
+                    task.wait(0.00006)
                 end
                 
                 fishCaught = fishCaught + 1
@@ -117,10 +117,8 @@ MainTab:CreateToggle({
         getgenv().Blati = Value
         if Value then
             startBlati()
-            local args = {
-	"bd4238ec-6bbc-4523-8c63-a17356e1f130"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("FishUI"):WaitForChild("ToServer"):WaitForChild("ToggleFavorite"):FireServer(unpack(args))
+            local args = {"bd4238ec-6bbc-4523-8c63-a17356e1f130"}
+            game:GetService("ReplicatedStorage"):WaitForChild("FishUI"):WaitForChild("ToServer"):WaitForChild("ToggleFavorite"):FireServer(unpack(args))
             local backpackTool = player.Backpack:FindFirstChildOfClass("Tool")
             if backpackTool then backpackTool.Parent = player.Character end
         else
@@ -139,21 +137,21 @@ local function startForceSecret()
                 task.wait(0.00001)
                 minigameStarted:FireServer(sessionID)
                 
-                -- NEW METHOD 2026 (LuvHub/Getfish style post-patch)
-                -- Short reel + heavy spam reelFinished + delay cancel simulation
-                local reelDuration = math.random(0.25, 0.85)
-                task.wait(0.05) -- minimal wait biar server nerima tanpa kick
+                -- DEEP SEARCH PASTEBIN + GITHUB 2026 (LuvHub delay cancel + throttle style)
+                -- Server tambah delay reel → sekarang pake medium reel + cancel simulation + heavy throttle
+                local reelDuration = math.random(1.8, 4.2) -- minimal aman post-delay patch
+                task.wait(0.08) -- throttle biar server nerima tanpa kick
                 
-                for i = 1, 8 do  -- spam lebih berat biar cepet + anti detect
+                for i = 1, 10 do  -- spam + delay cancel
                     local successArgs = {
                         ["duration"] = reelDuration,
                         ["result"] = "SUCCESS",
-                        ["insideRatio"] = 0.85 + (math.random(4, 14) / 100),
+                        ["insideRatio"] = 0.86 + (math.random(3, 13) / 100),
                         ["catchType"] = "SECRET",
                         ["isSecret"] = true
                     }
                     reelFinished:FireServer(successArgs, sessionID)
-                    task.wait(0.00008)
+                    task.wait(0.00006)
                 end
                 
                 fishCaught = fishCaught + 1
@@ -177,10 +175,8 @@ MainTab:CreateToggle({
         getgenv().ForceSecret = Value
         if Value then
             startForceSecret()
-            local args = {
-	"bd4238ec-6bbc-4523-8c63-a17356e1f130"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("FishUI"):WaitForChild("ToServer"):WaitForChild("ToggleFavorite"):FireServer(unpack(args))
+            local args = {"bd4238ec-6bbc-4523-8c63-a17356e1f130"}
+            game:GetService("ReplicatedStorage"):WaitForChild("FishUI"):WaitForChild("ToServer"):WaitForChild("ToggleFavorite"):FireServer(unpack(args))
             local backpackTool = player.Backpack:FindFirstChildOfClass("Tool")
             if backpackTool then backpackTool.Parent = player.Character end
         else
