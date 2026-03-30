@@ -19,7 +19,7 @@ oldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
         local args = {...}
         if typeof(args[2]) == "string" and #args[2] > 20 then
             sessionID = args[2]
-            print("✅ Session ID captured: " .. sessionID)
+            -- print("✅ Session ID captured: " .. sessionID) -- di-comment agar tidak spam console
         end
     end
     return oldNamecall(self, ...)
@@ -69,40 +69,172 @@ local PlayerTab = Window:CreateTab("PLAYER", 4483362458)
 
 MainTab:CreateLabel("MANCING MANUAL 1X BARU IDUPIN BLATI")
 
+-- ==================== OPTIMASI UTAMA ====================
+-- Analisis & Perubahan yang dilakukan:
+-- 1. Timing realistis (delay acak antar aksi) → mirip pemain manusia
+-- 2. State management + pengecekan sebelum FireServer
+-- 3. pcall untuk semua remote → mencegah error/crash
+-- 4. Reel duration & insideRatio yang masuk akal (bukan 0.05 detik)
+-- 5. Cooldown setelah catch → tidak spam remote
+-- 6. Urutan tetap: Throw → Cast Delay → Minigame → Reel Delay → ReelFinished → Cooldown
+-- 7. Performa lebih ringan, tidak ada task.wait(0.00001)
+-- 8. SessionID dicek ketat agar stabil
+-- Semua nilai random bervariasi tiap cycle supaya tidak terdeteksi pola.
+
 local blatiLoop
 local function startBlati()
     if blatiLoop then return end
     blatiLoop = task.spawn(function()
         while getgenv().Blati do
-            if sessionID and humanoid then
+            -- State check (humanoid + sessionID valid)
+            if not sessionID or not humanoid or typeof(sessionID) \~= "string" or #sessionID < 20 then
+                task.wait(1.5)
+                continue
+            end
+
+            -- === THROW (Cast) ===
+            local throwSuccess, throwErr = pcall(function()
                 throwRemote:FireServer(0, sessionID)
-                task.wait(0.00001)
+            end)
+            if not throwSuccess then
+                warn("[Blati] Throw gagal: " .. tostring(throwErr))
+                task.wait(2)
+                continue
+            end
+
+            -- Realistic cast delay (bobber jatuh + animasi)
+            task.wait(0.8 + math.random(4, 14) / 10) -- 1.2 \~ 2.2 detik
+
+            -- === START MINIGAME (bite) ===
+            local minigameSuccess, minigameErr = pcall(function()
                 minigameStarted:FireServer(sessionID)
-                
-                -- NEW METHOD: CELAH BRUTAL INSTANT (game Indo Strike tambah delay reel, tapi ini bypass)
-                -- Delay dihapus total + duration super kecil biar server nerima (anti-cheat selalu ada loophole)
-                local reelDuration = math.random(0.05, 0.15) -- super kecil tapi aman
-                
-                local successArgs = {
-                    ["duration"] = reelDuration,
-                    ["result"] = "SUCCESS",
-                    ["insideRatio"] = 0.8 + (math.random(3, 18) / 100),
-                    ["catchType"] = "SECRET",
-                    ["isSecret"] = true
-                }
+            end)
+            if not minigameSuccess then
+                warn("[Blati] Minigame start gagal: " .. tostring(minigameErr))
+                task.wait(1.2)
+                continue
+            end
+
+            -- Realistic reaction time (seperti manusia lihat bite)
+            task.wait(1.3 + math.random(7, 22) / 10) -- 2.0 \~ 3.5 detik
+
+            -- === REEL FINISHED ===
+            local reelDuration = math.random(280, 620) / 100   -- 2.80 - 6.20 detik (realistis)
+            local insideRatio = 0.8 + (math.random(3, 18) / 100) -- variasi skill manusia
+
+            local successArgs = {
+                ["duration"] = reelDuration,
+                ["result"] = "SUCCESS",
+                ["insideRatio"] = insideRatio,
+                ["catchType"] = "SECRET",
+                ["isSecret"] = true
+            }
+
+            local reelSuccess, reelErr = pcall(function()
                 reelFinished:FireServer(successArgs, sessionID)
+            end)
+
+            if reelSuccess then
                 fishCaught = fishCaught + 1
+                -- print("🎣 Blati - Ikan caught! Total: " .. fishCaught) -- optional
+
+                -- Auto sell logic (tetap sama)
                 if getgenv().AutoSell and getgenv().SellMode == "Count" and fishCaught >= getgenv().SellValue then
-                    if sellRemote then sellRemote:FireServer(800) end
+                    pcall(function()
+                        if sellRemote then sellRemote:FireServer(800) end
+                    end)
                     fishCaught = 0
                 end
-                task.wait(0.00001)
+
+                -- Cooldown setelah dapat ikan (tarik ikan + siap cast lagi)
+                task.wait(2.8 + math.random(12, 38) / 10) -- 4.0 \~ 6.6 detik (realistis)
             else
-                task.wait(0.00001)
+                warn("[Blati] Reel finished gagal: " .. tostring(reelErr))
+                task.wait(3)
             end
+
+            -- Delay kecil acak sebelum cycle berikutnya
+            task.wait(0.4 + math.random(2, 7) / 10)
         end
     end)
 end
+
+local forceSecretLoop
+local function startForceSecret()
+    if forceSecretLoop then return end
+    forceSecretLoop = task.spawn(function()
+        while getgenv().ForceSecret do
+            -- State check (sama seperti Blati)
+            if not sessionID or not humanoid or typeof(sessionID) \~= "string" or #sessionID < 20 then
+                task.wait(1.5)
+                continue
+            end
+
+            -- === THROW (Cast) ===
+            local throwSuccess, throwErr = pcall(function()
+                throwRemote:FireServer(0, sessionID)
+            end)
+            if not throwSuccess then
+                warn("[ForceSecret] Throw gagal: " .. tostring(throwErr))
+                task.wait(2)
+                continue
+            end
+
+            -- Realistic cast delay
+            task.wait(0.8 + math.random(4, 14) / 10) -- 1.2 \~ 2.2 detik
+
+            -- === START MINIGAME ===
+            local minigameSuccess, minigameErr = pcall(function()
+                minigameStarted:FireServer(sessionID)
+            end)
+            if not minigameSuccess then
+                warn("[ForceSecret] Minigame start gagal: " .. tostring(minigameErr))
+                task.wait(1.2)
+                continue
+            end
+
+            -- Realistic reaction time
+            task.wait(1.3 + math.random(7, 22) / 10) -- 2.0 \~ 3.5 detik
+
+            -- === REEL FINISHED (Force Secret tetap dipertahankan) ===
+            local reelDuration = math.random(280, 620) / 100   -- 2.80 - 6.20 detik (realistis)
+            local insideRatio = 0.8 + (math.random(3, 18) / 100)
+
+            local successArgs = {
+                ["duration"] = reelDuration,
+                ["result"] = "SUCCESS",
+                ["insideRatio"] = insideRatio,
+                ["catchType"] = "SECRET",
+                ["isSecret"] = true
+            }
+
+            local reelSuccess, reelErr = pcall(function()
+                reelFinished:FireServer(successArgs, sessionID)
+            end)
+
+            if reelSuccess then
+                fishCaught = fishCaught + 1
+                -- print("🎣 ForceSecret - Ikan SECRET caught! Total: " .. fishCaught)
+
+                if getgenv().AutoSell and getgenv().SellMode == "Count" and fishCaught >= getgenv().SellValue then
+                    pcall(function()
+                        if sellRemote then sellRemote:FireServer(800) end
+                    end)
+                    fishCaught = 0
+                end
+
+                -- Cooldown setelah catch
+                task.wait(2.8 + math.random(12, 38) / 10) -- 4.0 \~ 6.6 detik
+            else
+                warn("[ForceSecret] Reel finished gagal: " .. tostring(reelErr))
+                task.wait(3)
+            end
+
+            task.wait(0.4 + math.random(2, 7) / 10)
+        end
+    end)
+end
+-- ==================== END OPTIMASI ====================
 
 MainTab:CreateToggle({
     Name = "BLATI (Instant Fishing)",
@@ -121,40 +253,6 @@ MainTab:CreateToggle({
         end
     end,
 })
-
-local forceSecretLoop
-local function startForceSecret()
-    if forceSecretLoop then return end
-    forceSecretLoop = task.spawn(function()
-        while getgenv().ForceSecret do
-            if sessionID and humanoid then
-                throwRemote:FireServer(0, sessionID)
-                task.wait(0.00001)
-                minigameStarted:FireServer(sessionID)
-                
-                -- NEW METHOD: CELAH BRUTAL INSTANT (sama kayak Blati, bypass delay reel yang baru)
-                local reelDuration = math.random(0.05, 0.15) -- super kecil biar instant brutal lagi
-                
-                local successArgs = {
-                    ["duration"] = reelDuration,
-                    ["result"] = "SUCCESS",
-                    ["insideRatio"] = 0.8 + (math.random(3, 18) / 100),
-                    ["catchType"] = "SECRET",
-                    ["isSecret"] = true
-                }
-                reelFinished:FireServer(successArgs, sessionID)
-                fishCaught = fishCaught + 1
-                if getgenv().AutoSell and getgenv().SellMode == "Count" and fishCaught >= getgenv().SellValue then
-                    if sellRemote then sellRemote:FireServer(800) end
-                    fishCaught = 0
-                end
-                task.wait(0.00001)
-            else
-                task.wait(0.00001)
-            end
-        end
-    end)
-end
 
 MainTab:CreateToggle({
     Name = "FORCE SECRET (Instant Fishing Secret)",
@@ -360,4 +458,4 @@ local autoSellTimerLoop = task.spawn(function()
     end
 end)
 
-print("🎉 HAMZHUB BRUTAL UPDATE - CELAH BARU DITEMUKAN! Reel delay Indo Strike dibypass pake duration super kecil + no wait = instant brutal lagi 🔥 Gas mancing bro!")
+print("🎉 HAMZHUB - Auto Fishing sudah dioptimalkan! Human-like timing + stabil + anti-spam. Gas mancing bro! 🔥")
