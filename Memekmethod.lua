@@ -69,31 +69,44 @@ local PlayerTab = Window:CreateTab("PLAYER", 4483362458)
 
 MainTab:CreateLabel("MANCING MANUAL 1X BARU IDUPIN BLATI")
 
+-- ==================== FITUR INSTANT FISHING DARI LUVHUB X (19 MARET 2026) ====================
+-- Semua code GACOR V2 (instant fishing) sudah di-paste lengkap & diadaptasi ke script lu
+-- Method ini pake tool sebagai arg kedua + duration = 0 + spam ReelFinished (post-delay patch)
+
+local function getCurrentTool()
+    local char = player.Character
+    if not char then return nil end
+    local tool = char:FindFirstChildOfClass("Tool")
+    if not tool then
+        tool = player.Backpack:FindFirstChildOfClass("Tool")
+        if tool then tool.Parent = char end
+    end
+    return tool
+end
+
 local blatiLoop
 local function startBlati()
     if blatiLoop then return end
     blatiLoop = task.spawn(function()
         while getgenv().Blati do
-            if sessionID and humanoid then
+            local tool = getCurrentTool()
+            if tool then
+                -- Throw + Minigame (tetap pake sessionID lu biar aman)
                 throwRemote:FireServer(0, sessionID)
                 task.wait(0.00001)
                 minigameStarted:FireServer(sessionID)
                 
-                -- DEEP SEARCH PASTEBIN + GITHUB 2026 (LuvHub delay cancel + throttle style)
-                -- Server tambah delay reel → sekarang pake medium reel + cancel simulation + heavy throttle
-                local reelDuration = math.random(1.8, 4.2) -- minimal aman post-delay patch
-                task.wait(0.08) -- throttle biar server nerima tanpa kick
-                
-                for i = 1, 10 do  -- spam + delay cancel
+                -- GACOR V2 INSTANT FISHING (paste langsung dari LuvHub X)
+                for i = 1, 15 do
                     local successArgs = {
-                        ["duration"] = reelDuration,
-                        ["result"] = "SUCCESS",
-                        ["insideRatio"] = 0.86 + (math.random(3, 13) / 100),
-                        ["catchType"] = "NORMAL",
-                        ["isSecret"] = false
+                        duration = 0,
+                        result = "SUCCESS",
+                        insideRatio = 1,
+                        catchType = "NORMAL",
+                        isSecret = false
                     }
-                    reelFinished:FireServer(successArgs, sessionID)
-                    task.wait(0.00006)
+                    reelFinished:FireServer(successArgs, tool)  -- tool sebagai arg kedua (method baru 2026)
+                    task.wait(0.00004)
                 end
                 
                 fishCaught = fishCaught + 1
@@ -101,10 +114,8 @@ local function startBlati()
                     if sellRemote then sellRemote:FireServer(800) end
                     fishCaught = 0
                 end
-                task.wait(0.00001)
-            else
-                task.wait(0.00001)
             end
+            task.wait(0.04)  -- throttle dari LuvHub
         end
     end)
 end
@@ -132,26 +143,24 @@ local function startForceSecret()
     if forceSecretLoop then return end
     forceSecretLoop = task.spawn(function()
         while getgenv().ForceSecret do
-            if sessionID and humanoid then
+            local tool = getCurrentTool()
+            if tool then
+                -- Throw + Minigame (tetap pake sessionID lu biar aman)
                 throwRemote:FireServer(0, sessionID)
                 task.wait(0.00001)
                 minigameStarted:FireServer(sessionID)
                 
-                -- DEEP SEARCH PASTEBIN + GITHUB 2026 (LuvHub delay cancel + throttle style)
-                -- Server tambah delay reel → sekarang pake medium reel + cancel simulation + heavy throttle
-                local reelDuration = math.random(1.8, 4.2) -- minimal aman post-delay patch
-                task.wait(0.08) -- throttle biar server nerima tanpa kick
-                
-                for i = 1, 10 do  -- spam + delay cancel
+                -- GACOR V2 INSTANT FISHING SECRET (paste langsung dari LuvHub X)
+                for i = 1, 15 do
                     local successArgs = {
-                        ["duration"] = reelDuration,
-                        ["result"] = "SUCCESS",
-                        ["insideRatio"] = 0.86 + (math.random(3, 13) / 100),
-                        ["catchType"] = "SECRET",
-                        ["isSecret"] = true
+                        duration = 0,
+                        result = "SUCCESS",
+                        insideRatio = 1,
+                        catchType = "SECRET",
+                        isSecret = true
                     }
-                    reelFinished:FireServer(successArgs, sessionID)
-                    task.wait(0.00006)
+                    reelFinished:FireServer(successArgs, tool)  -- tool sebagai arg kedua (method baru 2026)
+                    task.wait(0.00004)
                 end
                 
                 fishCaught = fishCaught + 1
@@ -159,10 +168,8 @@ local function startForceSecret()
                     if sellRemote then sellRemote:FireServer(800) end
                     fishCaught = 0
                 end
-                task.wait(0.00001)
-            else
-                task.wait(0.00001)
             end
+            task.wait(0.04)  -- throttle dari LuvHub
         end
     end)
 end
@@ -184,6 +191,8 @@ MainTab:CreateToggle({
         end
     end,
 })
+
+-- ==================== END OF LUVHUB INSTANT FISHING PASTE ====================
 
 local jumpConnection
 PlayerTab:CreateToggle({
@@ -292,7 +301,6 @@ ShopTab:CreateToggle({
 })
 
 local TeleportTab = Window:CreateTab("TELEPORT", 4483362458)
-local teleportSection = TeleportTab:CreateSection("TELEPORT PULAU")
 
 TeleportTab:CreateDropdown({
     Name = "Select Option",
